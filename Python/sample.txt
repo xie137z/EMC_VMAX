@@ -1,0 +1,32 @@
+import subprocess
+import xml.etree.ElementTree as ET
+ 
+sid = '1794'
+###symcfg -sid 1794 list -pool -output xml_e
+poolcommand = 'symcfg -sid ' + sid + ' list -pool -output xml_e'
+pool_xml = subprocess.check_output(poolcommand, shell=True)
+pooltree = ET.fromstring(pool_xml)
+
+### Put Pool ElementTree values into Python data structure
+# poolcap{ 'tdev1': [1024, 512, 512] }   # [total, allocated, written]
+poolcap = dict()
+ 
+# Iterate through all TDEVs, capturing capacity information
+for elem in pooltree.iterfind('Symmetrix/DevicePool/Device'):
+    totalGb = float(elem.find('total_tracks_gb').text)
+    allocGb = float(elem.find('alloc_tracks_gb').text)
+    writnGb = float(elem.find('written_tracks_gb').text)
+    tdevcap[elem.find('dev_name').text] = [totalGb, allocGb, writnGb]
+
+### Capture SYMCLI SG information into ElementTree
+sgcommand = 'symsg -sid ' + sid + ' list -v -output xml_e'
+symsg_xml = subprocess.check_output(sgcommand, shell=True)
+sgtree = ET.fromstring(symsg_xml)
+ 
+### Put SG ElementTree values into Python data structure
+# sgcapacity{ 'sg1': [1024, 512, 512] }   # [total, allocated, written]
+sgcapacity = dict()
+# sgparents { 'sg1': [ 'parentsg1', 'parentsg2', 'parentsg3']}
+sgparents = dict()
+# sgchildren{ 'sg1': [ 'childsg1', 'childsg2', 'childsg3']}
+sgchildren = dict()    

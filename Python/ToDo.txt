@@ -1,0 +1,208 @@
+
+
+symfast -sid 57 list -demand -association -output xml
+
+
+symcfg -sid 0957 list -tdev -range 0B64:0b64 -gb    ----> this will give device details and current used ...etc.
+
+
+symcfg -sid 0957 show -pool <poolname> -thin -detail -gb -----> will give details about FAST movements of the extents 
+
+
+For IGs, use the views.xml you already have. Initiators will have either wwpns or group_names. 
+If group names, link to the groupname.html. If wwpn, just display it as text info.
+Examples below...
+
+- <Masking_View>
+- <View_Info>
+  <view_name>CHAPDC3MQHST_1A_1B_MV</view_name> 
+  <last_updated>02:58:21 PM on Fri Feb 28,2014</last_updated> 
+  <view_last_update_time>03:54:05 PM on Tue Mar 04,2014</view_last_update_time> 
+  <init_grpname>CHAPDC3MQHST_1A_1B_IG</init_grpname> 
+- <Initiators>
+  <group_name>CHAPDC3MQHST1A_IG</group_name> 
+  <group_name>CHAPDC3MQHST1B_IG</group_name> 
+  </Initiators>
+
+  <view_name>CHAPDA3LOGI08_MV</view_name> 
+  <last_updated>11:27:53 AM on Fri Mar 14,2014</last_updated> 
+  <view_last_update_time>11:27:53 AM on Fri Mar 14,2014</view_last_update_time> 
+  <init_grpname>CHAPDA3LOGI08_IG</init_grpname> 
+- <Initiators>
+  <wwn>10000090fa52b984</wwn> 
+  <user_node_name>10000090fa52b984</user_node_name> 
+  <user_port_name>10000090fa52b984</user_port_name> 
+  <wwn>10000090fa52b985</wwn> 
+  <user_node_name>10000090fa52b985</user_node_name> 
+  <user_port_name>10000090fa52b985</user_port_name> 
+  </Initiators>
+
+
+Get a list of initiators and iterate over it for wwpns.
+
+  517  symaccess -sid 57 list -type storage
+  518  symaccess -sid 57 list -type initiator
+  519  symaccess -sid 57 show UTRC30BC_IG -type initiator
+
+
+
+
+
+[root@chapdt3util01--->]symaccess list -sid 94 assignment -dev 0B5E
+
+Symmetrix ID          : 000195701794
+
+Sym
+Dev     Identifier        Type   Dir:P
+------  ----------------  -----  ----------------
+0B5E    10000090fa5280f8  FIBRE  FA-5H:0,FA-6H:1,FA-11H:0,FA-12H:1
+        10000090fa5280f9  FIBRE  FA-5H:0,FA-6H:1,FA-11H:0,FA-12H:1
+
+
+
+[root@chapdt3util01--->]symfast list -fp -v -output xml_e
+
+
+<?xml version="1.0" standalone="yes" ?>
+<SymCLI_ML>
+  <Symmetrix>
+    <Symm_Info>
+      <symid>000195701794</symid>
+    </Symm_Info>
+    <Fast_Policy>
+      <Policy_Info>
+        <policy_name>BRONZE</policy_name>
+        <emulation>FBA</emulation>
+        <num_of_tiers>2</num_of_tiers>
+        <num_of_sg>0</num_of_sg>
+      </Policy_Info>
+      <Tier>
+        <tier_name>VP_FC15k_Mir2</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>50</tier_max_sg_per>
+        <tier_protection>RAID-1</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>FC</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+      <Tier>
+        <tier_name>VP_SATA_R66</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>100</tier_max_sg_per>
+        <tier_protection>RAID-6(6+2)</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>SATA</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+    </Fast_Policy>
+    <Fast_Policy>
+      <Policy_Info>
+        <policy_name>FC_SATA_T3</policy_name>
+        <emulation>N/A</emulation>
+        <num_of_tiers>0</num_of_tiers>
+        <num_of_sg>0</num_of_sg>
+      </Policy_Info>
+    </Fast_Policy>
+    <Fast_Policy>
+      <Policy_Info>
+        <policy_name>GOLD</policy_name>
+        <emulation>FBA</emulation>
+        <num_of_tiers>2</num_of_tiers>
+        <num_of_sg>0</num_of_sg>
+      </Policy_Info>
+      <Tier>
+        <tier_name>VP_EFD_R5</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>15</tier_max_sg_per>
+        <tier_protection>RAID-5(3+1)</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>EFD</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+      <Tier>
+        <tier_name>VP_FC15k_Mir2</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>100</tier_max_sg_per>
+        <tier_protection>RAID-1</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>FC</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+    </Fast_Policy>
+    <Fast_Policy>
+      <Policy_Info>
+        <policy_name>SILVER</policy_name>
+        <emulation>FBA</emulation>
+        <num_of_tiers>3</num_of_tiers>
+        <num_of_sg>10</num_of_sg>
+      </Policy_Info>
+      <Tier>
+        <tier_name>VP_EFD_R5</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>5</tier_max_sg_per>
+        <tier_protection>RAID-5(3+1)</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>EFD</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+      <Tier>
+        <tier_name>VP_FC15k_Mir2</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>75</tier_max_sg_per>
+        <tier_protection>RAID-1</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>FC</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+      <Tier>
+        <tier_name>VP_SATA_R66</tier_name>
+        <tier_type>VP</tier_type>
+        <tier_max_sg_per>100</tier_max_sg_per>
+        <tier_protection>RAID-6(6+2)</tier_protection>
+        <disk_location>Internal</disk_location>
+        <tier_tech>SATA</tier_tech>
+        <compression_cap>False</compression_cap>
+      </Tier>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI01_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI02_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI03_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI04_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI05_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI06_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI07_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDA3LOGI08_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDC3MQHST_1A_1B_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+      <Storage_Group>
+        <sg_name>CHAPDC3MQHST_2A_2B_SG</sg_name>
+        <sg_priority>2</sg_priority>
+      </Storage_Group>
+    </Fast_Policy>
+  </Symmetrix>
+</SymCLI_ML>
